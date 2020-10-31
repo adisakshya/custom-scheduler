@@ -1,3 +1,5 @@
+org: adisakshya98
+app: notification-scheduler-app
 service:
   name: notification-scheduler
 
@@ -28,6 +30,4 @@ functions:
   main:
     handler: src/main.handler
     events:
-      - http:
-          method: any
-          path: /{any+}
+      - schedule: rate(1 minutes)

@@ -6,7 +6,7 @@ import {
   } from '@nestjs/platform-fastify';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { AppService } from './app.service';
+import { SchedulerService } from './scheduler/scheduler.service';
 
 async function bootstrapServer(): Promise<INestApplication> {
     const nestApp = await NestFactory.create<NestFastifyApplication>(
@@ -18,7 +18,7 @@ async function bootstrapServer(): Promise<INestApplication> {
 
 export const handler: Handler = async (event: any, context: Context) => {
     const appServer = await bootstrapServer();
-    const appService = appServer.get(AppService);
+    const appService = appServer.get(SchedulerService);
     const result = appService.getHello();
     console.log('Execution Result:', result);
 }

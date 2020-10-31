@@ -1,13 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter } from '@nestjs/platform-express';
 import { Context, Handler } from "aws-lambda";
-import * as Express from 'express';
-import { AppModule } from './app.module';
+import {
+    FastifyAdapter,
+    NestFastifyApplication,
+  } from '@nestjs/platform-fastify';
 import { INestApplication } from '@nestjs/common';
+import { AppModule } from './app.module';
 import { AppService } from './app.service';
 
 async function bootstrapServer(): Promise<INestApplication> {
-    const nestApp = await NestFactory.create(AppModule, new ExpressAdapter(Express()));
+    const nestApp = await NestFactory.create<NestFastifyApplication>(
+        AppModule, 
+        new FastifyAdapter({ logger: true })
+    );
     return nestApp;
 }
 

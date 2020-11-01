@@ -19,6 +19,6 @@ async function bootstrapServer(): Promise<INestApplication> {
 export const handler: Handler = async (event: any, context: Context) => {
     const appServer = await bootstrapServer();
     const appService = appServer.get(SchedulerService);
-    const result = appService.getHello();
+    const result = await appService.scheduleNotifications();
     console.log('Execution Result:', result);
 }

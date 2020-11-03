@@ -7,12 +7,11 @@ export class Notification extends UserItemEntity {
     deliverAt: Date;
 
     @Column({nullable: false})
-    reminderId: string;
+    itemType: string;
 
-    public static findNotificationsByReminderId(userId: string, reminderId: string): Promise<Notification> {
-        return this.findOne({
-            where: {userId, reminderId},
-            order: {createdAt: "DESC"}
-        });
-    }
+    @Column({nullable: false})
+    itemId: string;
+
+    @Column({nullable: false})
+    notificationData: string;
 }

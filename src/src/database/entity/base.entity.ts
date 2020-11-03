@@ -15,4 +15,9 @@ export class UserItemEntity extends BaseEntity {
     @Column()
     @Index()
     userId: string;
+
+    @Exclude()
+    @Column()
+    @Index()
+    userEmail: string;
 }

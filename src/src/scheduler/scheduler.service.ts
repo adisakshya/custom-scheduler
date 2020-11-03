@@ -1,11 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ApiConfigService } from "../common/api-config.service";
 import { Equal } from 'typeorm';
 import { Notification } from '../database/entity/notification.entity';
+import * as AWS from "aws-sdk";
 
 @Injectable()
 export class SchedulerService {
   private readonly logger = new Logger("Scheduler Service");
-  constructor() {}
+  constructor(@Inject("AWS-SNS")
+              private readonly sns: AWS.SNS,
+              private readonly configService: ApiConfigService) {}
 
   async scheduleNotifications(): Promise<string> {
     const currentTime = new Date().toUTCString();
@@ -17,6 +21,37 @@ export class SchedulerService {
         deliverAt: Equal(targetTime)
       }
     });
+    // Foward each notification
+    for(let i=0; i<count; i++) {
+      this.forwardNotifications(notifications[i]);
+    }
     return `Scheduled ${count} notifications`;
+  }
+
+  private async forwardNotifications(notification: Notification): Promise<void> {
+    const notificationData = JSON.parse(notification.notificationData);
+    this.sns.publish({
+        Message: JSON.stringify({
+            userId: notification.userId,
+            userEmail: notificationData.userEmail,
+            itemId: notificationData.reminderId,
+            eventData: notificationData
+        }),
+        MessageAttributes: {
+            eventItemType: {
+                DataType: 'String',
+                StringValue: 'notification'
+            },
+            eventType: {
+                DataType: 'String',
+                StringValue: 'notification:send'
+            },
+            userId: {
+                DataType: 'String',
+                StringValue: notification.userId
+            }
+        },
+        TopicArn: this.configService.notificationTopicArn
+    }).promise();
   }
 }

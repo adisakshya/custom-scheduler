@@ -1,4 +1,5 @@
 import { CommonModule } from "./common/common.module";
+import { SchedulerModule } from "./scheduler/scheduler.module";
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ApiConfigService } from "./common/api-config.service";
@@ -20,7 +21,8 @@ import { Notification } from './database/entity/notification.entity';
               imports: [CommonModule],
               inject: [ApiConfigService]
             }),
-            CommonModule
+            CommonModule,
+            SchedulerModule
           ],
   controllers: [],
   providers: [SchedulerService],

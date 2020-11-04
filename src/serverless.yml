@@ -1,0 +1,33 @@
+org: adisakshya98
+app: notification-scheduler-app
+service:
+  name: notification-scheduler
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-plugin-optimize
+  - serverless-offline
+  # - serverless-plugin-warmup
+
+# custom:
+#   secrets: ${file(./secrets.yml):${self:provider.stage}}
+  # warmup:
+  #     enabled: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  # environment:
+  #   EXAMPLE_ENV_VARIABLE: ${self:custom.secrets.EXAMPLE_ENV_VARIABLE}
+
+package:
+  individually: true
+
+functions:
+  main:
+    handler: src/main.handler
+    events:
+      - schedule: rate(1 minutes)

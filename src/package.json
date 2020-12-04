@@ -1,10 +1,10 @@
 {
   "name": "notification-scheduler",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "1.0.0",
+  "description": "AWS lambda function to schedule notifications",
+  "author": "Adisakshya Chauhan",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

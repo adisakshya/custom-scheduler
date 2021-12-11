@@ -5,7 +5,12 @@
 
 ## Overview
 
-All notifications generated are stored in the PostgreSQL notifications-database by the [event-service](https://github.com/adisakshya/event-service) with all the information required to send the notification to the client. The notification-scheduler is a lambda-function that is invoked using a cloud-watch schedule that triggers every 1 minute. When invoked, the scheduler retrieves the notification from the notification-database that are to be delivered in the next minute and forward them to the notification-sns-topic as notificaton-messages. The notification-sqs-queue subscribed to the notification-sns-topic recieves the notification-message as soon as it is published to the sns-topic. The [notification-service](https://github.com/adisakshya/notification-service) is continuously polling the notification-sqs-queue and send the incoming notification to the clients.
+The notification-scheduler is a lambda-function that is invoked using a cloud-watch schedule that triggers every 1 minute.
+
+- All notifications created by the clients are stored in the PostgreSQL notifications-database by the [event-service](https://github.com/adisakshya/event-service) with all the information required to send the notification to the client. 
+- When the notification-scheduler is invoked it retrieves the notification from the notification-database that are to be delivered in the next minute and forward them to the notification-sns-topic as notificaton-messages. 
+- The notification-sqs-queue subscribed to the notification-sns-topic recieves the notification-message as soon as it is published to the sns-topic. 
+- The [notification-service](https://github.com/adisakshya/notification-service) continuously polls the notification-sqs-queue and send the incoming notification to the clients.
 
 ## Operating Instructions
 
